@@ -1,6 +1,6 @@
-package com.enzo.restaurant_api.domain.repositories;
+package com.enzo.restaurant_api.repository;
 
-import com.enzo.restaurant_api.domain.entities.Restaurant;
+import com.enzo.restaurant_api.entity.Restaurant;
 
 import java.util.List;
 import java.util.Optional;

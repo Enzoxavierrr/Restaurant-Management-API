@@ -1,4 +1,4 @@
-package com.enzo.restaurant_api.domain.entities;
+package com.enzo.restaurant_api.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
