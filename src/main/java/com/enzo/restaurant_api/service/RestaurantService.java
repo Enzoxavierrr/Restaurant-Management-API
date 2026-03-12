@@ -1,6 +1,7 @@
 package com.enzo.restaurant_api.service;
 
 import com.enzo.restaurant_api.entity.Restaurant;
+import com.enzo.restaurant_api.exception.RestaurantNotFoundException;
 import com.enzo.restaurant_api.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,17 @@ public class RestaurantService {
 
     public Restaurant create(Restaurant restaurant) {
         validateRequiredFields(restaurant);
-        restaurant.activate();
+
+        if (restaurant.getActive() == null) {
+            restaurant.activate();
+        }
+
         return restaurantRepository.save(restaurant);
     }
 
     public Restaurant findById(Long id) {
         return restaurantRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Restaurant não encontrado para o id: " + id));
+                .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
     public List<Restaurant> findAll() {
@@ -40,6 +45,23 @@ public class RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
+    public Restaurant update(Long id, Restaurant restaurant) {
+        validateRequiredFields(restaurant);
+
+        Restaurant existingRestaurant = findById(id);
+        existingRestaurant.setName(restaurant.getName());
+        existingRestaurant.setCnpj(restaurant.getCnpj());
+        existingRestaurant.setPhone(restaurant.getPhone());
+        existingRestaurant.setEmail(restaurant.getEmail());
+        existingRestaurant.setAddress(restaurant.getAddress());
+
+        if (restaurant.getActive() != null) {
+            existingRestaurant.setActive(restaurant.getActive());
+        }
+
+        return restaurantRepository.save(existingRestaurant);
+    }
+
     public void deleteById(Long id) {
         findById(id);
         restaurantRepository.deleteById(id);
@@ -51,11 +73,12 @@ public class RestaurantService {
         }
 
         if (isBlank(restaurant.getName())) {
-            throw new IllegalArgumentException("Nome do restaurant é obrigatório");
+            throw new IllegalArgumentException(
+                    "O campo 'name' (nome do restaurante) é obrigatório e não pode ser vazio.");
         }
 
         if (isBlank(restaurant.getCnpj())) {
-            throw new IllegalArgumentException("CNPJ do restaurant é obrigatório");
+            throw new IllegalArgumentException("O campo 'cnpj' é obrigatório e não pode ser vazio.");
         }
     }
 

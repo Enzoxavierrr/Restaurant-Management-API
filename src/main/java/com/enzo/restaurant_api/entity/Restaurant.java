@@ -19,7 +19,7 @@ public class Restaurant {
     private String phone;
     private String email;
     private String address;
-    private boolean active;
+    private Boolean active;
 
     public void activate() {
         this.active = true;

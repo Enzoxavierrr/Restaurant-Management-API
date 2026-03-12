@@ -1,0 +1,23 @@
+# HTTP requests (testes locais)
+requests.http
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# Spring Boot
+*.log
+spring.log
+
+# OS
+.DS_Store
+Thumbs.db

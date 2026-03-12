@@ -2,6 +2,8 @@
 /Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/config/SecurityConfig.java
 /Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/controller/RestaurantController.java
 /Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/entity/Restaurant.java
+/Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/exception/GlobalExceptionHandler.java
+/Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/exception/RestaurantNotFoundException.java
 /Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/repository/InMemoryRestaurantRepository.java
 /Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/repository/RestaurantRepository.java
 /Users/enzoxavier/Desktop/Mesa - MacBook Air de Enzo/Portifólio/Projetos/Restaurant-Management-API/src/main/java/com/enzo/restaurant_api/service/RestaurantService.java

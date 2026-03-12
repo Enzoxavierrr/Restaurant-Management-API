@@ -8,18 +8,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Repository
 public class InMemoryRestaurantRepository implements RestaurantRepository {
 
     private final Map<Long, Restaurant> database = new ConcurrentHashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong(1);
 
     @Override
     public Restaurant save(Restaurant restaurant) {
         if (restaurant.getId() == null) {
-            restaurant.setId(idGenerator.getAndIncrement());
+            long randomId;
+            do {
+                randomId = ThreadLocalRandom.current().nextLong(100000L, 999999999L);
+            } while (database.containsKey(randomId));
+            restaurant.setId(randomId);
         }
 
         database.put(restaurant.getId(), restaurant);
