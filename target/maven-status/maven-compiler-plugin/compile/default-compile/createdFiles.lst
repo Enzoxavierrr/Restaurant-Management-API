@@ -1,2 +1,8 @@
-com/enzo/restaurant_api/RestaurantApiApplication.class
 com/enzo/restaurant_api/config/SecurityConfig.class
+com/enzo/restaurant_api/repository/UserRepository.class
+com/enzo/restaurant_api/repository/InMemoryUserRepository.class
+com/enzo/restaurant_api/entity/User$UserBuilder.class
+com/enzo/restaurant_api/RestaurantApiApplication.class
+com/enzo/restaurant_api/service/UserService.class
+com/enzo/restaurant_api/controller/UserController.class
+com/enzo/restaurant_api/entity/User.class
