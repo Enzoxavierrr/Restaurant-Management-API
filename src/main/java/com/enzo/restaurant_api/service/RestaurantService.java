@@ -35,7 +35,6 @@ public class RestaurantService {
                 .active(request.getActive() != null ? request.getActive() : true)
                 .owner(owner)
                 .build();
-
         return toResponse(restaurantRepository.save(restaurant));
     }
 
