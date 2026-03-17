@@ -1,5 +1,7 @@
 package com.enzo.restaurant_api.service;
 
+import com.enzo.restaurant_api.dto.RestaurantRequest;
+import com.enzo.restaurant_api.dto.RestaurantResponse;
 import com.enzo.restaurant_api.entity.Restaurant;
 import com.enzo.restaurant_api.exception.RestaurantNotFoundException;
 import com.enzo.restaurant_api.repository.RestaurantRepository;
@@ -14,14 +16,23 @@ public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
 
-    public Restaurant create(Restaurant restaurant) {
-        validateRequiredFields(restaurant);
+    public RestaurantResponse create(RestaurantRequest request) {
+        validateRequiredFields(request);
 
-        if (restaurant.getActive() == null) {
-            restaurant.activate();
-        }
+        Restaurant restaurant = Restaurant.builder()
+                .name(request.getName())
+                .cnpj(request.getCnpj())
+                .phone(request.getPhone())
+                .email(request.getEmail())
+                .address(request.getAddress())
+                .active(request.getActive() != null ? request.getActive() : true)
+                .build();
 
-        return restaurantRepository.save(restaurant);
+        return toResponse(restaurantRepository.save(restaurant));
+    }
+
+    public RestaurantResponse findByIdResponse(Long id) {
+        return toResponse(findById(id));
     }
 
     public Restaurant findById(Long id) {
@@ -29,37 +40,39 @@ public class RestaurantService {
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
-    public List<Restaurant> findAll() {
-        return restaurantRepository.findAll();
+    public List<RestaurantResponse> findAll() {
+        return restaurantRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public Restaurant activate(Long id) {
+    public RestaurantResponse activate(Long id) {
         Restaurant restaurant = findById(id);
         restaurant.activate();
-        return restaurantRepository.save(restaurant);
+        return toResponse(restaurantRepository.save(restaurant));
     }
 
-    public Restaurant deactivate(Long id) {
+    public RestaurantResponse deactivate(Long id) {
         Restaurant restaurant = findById(id);
         restaurant.deactivate();
-        return restaurantRepository.save(restaurant);
+        return toResponse(restaurantRepository.save(restaurant));
     }
 
-    public Restaurant update(Long id, Restaurant restaurant) {
-        validateRequiredFields(restaurant);
+    public RestaurantResponse update(Long id, RestaurantRequest request) {
+        validateRequiredFields(request);
 
         Restaurant existingRestaurant = findById(id);
-        existingRestaurant.setName(restaurant.getName());
-        existingRestaurant.setCnpj(restaurant.getCnpj());
-        existingRestaurant.setPhone(restaurant.getPhone());
-        existingRestaurant.setEmail(restaurant.getEmail());
-        existingRestaurant.setAddress(restaurant.getAddress());
+        existingRestaurant.setName(request.getName());
+        existingRestaurant.setCnpj(request.getCnpj());
+        existingRestaurant.setPhone(request.getPhone());
+        existingRestaurant.setEmail(request.getEmail());
+        existingRestaurant.setAddress(request.getAddress());
 
-        if (restaurant.getActive() != null) {
-            existingRestaurant.setActive(restaurant.getActive());
+        if (request.getActive() != null) {
+            existingRestaurant.setActive(request.getActive());
         }
 
-        return restaurantRepository.save(existingRestaurant);
+        return toResponse(restaurantRepository.save(existingRestaurant));
     }
 
     public void deleteById(Long id) {
@@ -67,17 +80,29 @@ public class RestaurantService {
         restaurantRepository.deleteById(id);
     }
 
-    private void validateRequiredFields(Restaurant restaurant) {
-        if (restaurant == null) {
-            throw new IllegalArgumentException("Restaurant não pode ser nulo");
+    private RestaurantResponse toResponse(Restaurant restaurant) {
+        return RestaurantResponse.builder()
+                .id(restaurant.getId())
+                .name(restaurant.getName())
+                .cnpj(restaurant.getCnpj())
+                .phone(restaurant.getPhone())
+                .email(restaurant.getEmail())
+                .address(restaurant.getAddress())
+                .active(restaurant.getActive())
+                .build();
+    }
+
+    private void validateRequiredFields(RestaurantRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Requisição não pode ser nula");
         }
 
-        if (isBlank(restaurant.getName())) {
+        if (isBlank(request.getName())) {
             throw new IllegalArgumentException(
                     "O campo 'name' (nome do restaurante) é obrigatório e não pode ser vazio.");
         }
 
-        if (isBlank(restaurant.getCnpj())) {
+        if (isBlank(request.getCnpj())) {
             throw new IllegalArgumentException("O campo 'cnpj' é obrigatório e não pode ser vazio.");
         }
     }

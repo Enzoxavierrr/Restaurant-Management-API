@@ -1,6 +1,7 @@
 package com.enzo.restaurant_api.controller;
 
-import com.enzo.restaurant_api.entity.User;
+import com.enzo.restaurant_api.dto.CreateUserRequest;
+import com.enzo.restaurant_api.dto.UserResponse;
 import com.enzo.restaurant_api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> findAll() {
+    public List<UserResponse> findAll() {
         return userService.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody User user) {
-        return userService.create(user);
+    public UserResponse create(@RequestBody CreateUserRequest request) {
+        return userService.create(request);
     }
 }
