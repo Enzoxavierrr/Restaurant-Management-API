@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,12 +34,12 @@ public class RestaurantController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestaurantResponse create(@RequestBody RestaurantRequest request) {
+    public RestaurantResponse create(@Valid @RequestBody RestaurantRequest request) {
         return restaurantService.create(request);
     }
 
     @PutMapping("/{id}")
-    public RestaurantResponse update(@PathVariable Long id, @RequestBody RestaurantRequest request) {
+    public RestaurantResponse update(@PathVariable Long id, @Valid @RequestBody RestaurantRequest request) {
         return restaurantService.update(id, request);
     }
 

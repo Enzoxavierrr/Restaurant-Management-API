@@ -5,6 +5,7 @@ import com.enzo.restaurant_api.dto.RestaurantResponse;
 import com.enzo.restaurant_api.entity.Restaurant;
 import com.enzo.restaurant_api.entity.User;
 import com.enzo.restaurant_api.exception.RestaurantNotFoundException;
+import com.enzo.restaurant_api.exception.UserNotFoundException;
 import com.enzo.restaurant_api.repository.RestaurantRepository;
 import com.enzo.restaurant_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class RestaurantService {
         validateRequiredFields(request);
 
         User owner = userRepository.findById(request.getOwnerId())
-                .orElseThrow(() -> new IllegalArgumentException("Dono não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(request.getOwnerId()));
 
         Restaurant restaurant = Restaurant.builder()
                 .name(request.getName())
@@ -111,10 +112,6 @@ public class RestaurantService {
 
         if (isBlank(request.getCnpj())) {
             throw new IllegalArgumentException("O campo 'cnpj' é obrigatório e não pode ser vazio.");
-        }
-
-        if (request.getOwnerId() == null) {
-            throw new IllegalArgumentException("O campo 'ownerId' é obrigatório para registrar um restaurante.");
         }
     }
 
