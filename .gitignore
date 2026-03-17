@@ -1,6 +1,9 @@
 # HTTP requests (testes locais)
 requests.http
 
+# Notas e Rascunhos
+escopo.md
+
 # Maven
 target/
 !.mvn/wrapper/maven-wrapper.jar
