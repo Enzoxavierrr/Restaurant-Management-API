@@ -16,4 +16,5 @@ public class RestaurantRequest {
     private String email;
     private String address;
     private Boolean active;
+    private Long ownerId;
 }
