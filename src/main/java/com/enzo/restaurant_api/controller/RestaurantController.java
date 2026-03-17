@@ -1,6 +1,7 @@
 package com.enzo.restaurant_api.controller;
 
-import com.enzo.restaurant_api.entity.Restaurant;
+import com.enzo.restaurant_api.dto.RestaurantRequest;
+import com.enzo.restaurant_api.dto.RestaurantResponse;
 import com.enzo.restaurant_api.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,19 +27,19 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping
-    public List<Restaurant> findAll() {
+    public List<RestaurantResponse> findAll() {
         return restaurantService.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurant create(@RequestBody Restaurant restaurant) {
-        return restaurantService.create(restaurant);
+    public RestaurantResponse create(@RequestBody RestaurantRequest request) {
+        return restaurantService.create(request);
     }
 
     @PutMapping("/{id}")
-    public Restaurant update(@PathVariable Long id, @RequestBody Restaurant restaurant) {
-        return restaurantService.update(id, restaurant);
+    public RestaurantResponse update(@PathVariable Long id, @RequestBody RestaurantRequest request) {
+        return restaurantService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
