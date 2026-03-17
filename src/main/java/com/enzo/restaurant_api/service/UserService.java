@@ -24,6 +24,7 @@ public class UserService {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .createdAt(Instant.now())
+                .role(com.enzo.restaurant_api.entity.Role.OWNER)
                 .build();
                 
         User savedUser = userRepository.save(user);

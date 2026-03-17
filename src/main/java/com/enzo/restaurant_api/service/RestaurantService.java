@@ -3,8 +3,11 @@ package com.enzo.restaurant_api.service;
 import com.enzo.restaurant_api.dto.RestaurantRequest;
 import com.enzo.restaurant_api.dto.RestaurantResponse;
 import com.enzo.restaurant_api.entity.Restaurant;
+import com.enzo.restaurant_api.entity.User;
 import com.enzo.restaurant_api.exception.RestaurantNotFoundException;
+import com.enzo.restaurant_api.exception.UserNotFoundException;
 import com.enzo.restaurant_api.repository.RestaurantRepository;
+import com.enzo.restaurant_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +18,13 @@ import java.util.List;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final UserRepository userRepository;
 
     public RestaurantResponse create(RestaurantRequest request) {
         validateRequiredFields(request);
+
+        User owner = userRepository.findById(request.getOwnerId())
+                .orElseThrow(() -> new UserNotFoundException(request.getOwnerId()));
 
         Restaurant restaurant = Restaurant.builder()
                 .name(request.getName())
@@ -26,8 +33,8 @@ public class RestaurantService {
                 .email(request.getEmail())
                 .address(request.getAddress())
                 .active(request.getActive() != null ? request.getActive() : true)
+                .owner(owner)
                 .build();
-
         return toResponse(restaurantRepository.save(restaurant));
     }
 
