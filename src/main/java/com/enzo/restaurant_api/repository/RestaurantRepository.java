@@ -1,17 +1,15 @@
 package com.enzo.restaurant_api.repository;
 
 import com.enzo.restaurant_api.entity.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface RestaurantRepository {
+@Repository
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-    Restaurant save(Restaurant restaurant);
+    Optional<Restaurant> findByCnpj(String cnpj);
 
-    Optional<Restaurant> findById(Long id);
-
-    List<Restaurant> findAll();
-
-    void deleteById(Long id);
+    boolean existsByCnpj(String cnpj);
 }
