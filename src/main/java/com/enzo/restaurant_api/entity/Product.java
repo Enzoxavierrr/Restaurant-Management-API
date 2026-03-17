@@ -43,8 +43,8 @@ public class Product {
     @Builder.Default
     private Boolean active = true;
 
-    // Muitos Products → Um Category
+    // Muitos Products → Um Menu
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "menu_id", nullable = false)
+    private Menu menu;
 }
