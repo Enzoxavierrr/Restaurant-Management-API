@@ -1,3 +1,6 @@
+# Variáveis de ambiente (dados sensíveis)
+.env
+
 # HTTP requests (testes locais)
 requests.http
 

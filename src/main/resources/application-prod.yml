@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://prod-db-server:5432/restaurant_prod
-    username: prod_user
-    password: prod_password
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -11,5 +11,11 @@ spring:
     properties:
       hibernate:
         format_sql: false
+
 server:
   port: 80
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION}
