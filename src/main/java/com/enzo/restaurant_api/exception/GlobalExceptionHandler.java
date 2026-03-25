@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.enzo.restaurant_api.exception.InvalidCredentialsException;
 
 import java.time.Instant;
 import java.util.List;
@@ -36,6 +37,13 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI()));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidCredentials(InvalidCredentialsException ex,
+            HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(buildError(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getRequestURI()));
     }
 
     @ExceptionHandler(DuplicateResourceException.class)
