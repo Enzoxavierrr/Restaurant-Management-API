@@ -3,6 +3,7 @@ package com.enzo.restaurant_api.controller;
 import com.enzo.restaurant_api.dto.CreateUserRequest;
 import com.enzo.restaurant_api.dto.UserResponse;
 import com.enzo.restaurant_api.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse create(@RequestBody CreateUserRequest request) {
+    public UserResponse create(@Valid @RequestBody CreateUserRequest request) {
         return userService.create(request);
     }
 }

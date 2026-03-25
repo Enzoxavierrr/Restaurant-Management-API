@@ -11,10 +11,10 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findByCategoryId(Long categoryId);
+    List<Product> findByMenuId(Long menuId);
 
     List<Product> findByActiveTrue();
 
-    @Query("SELECT p FROM Product p WHERE p.active = true AND p.category.id = :categoryId")
-    List<Product> findActiveByCategoryId(@Param("categoryId") Long categoryId);
+    @Query("SELECT p FROM Product p WHERE p.active = true AND p.menu.id = :menuId")
+    List<Product> findActiveByMenuId(@Param("menuId") Long menuId);
 }
