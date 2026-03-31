@@ -44,14 +44,11 @@ Para considerar este projeto completo, ele deve atender:
 
 ## Fase 1 — Base sólida (MVP técnico)
 
-### 1.1 Persistência real com JPA + PostgreSQL
-- [ ] Transformar `Restaurant` e `User` em entidades JPA (`@Entity`, `@Table`, `@Id`, `@GeneratedValue`).
-- [ ] Criar repositórios Spring Data (`JpaRepository`) em `infrastructure/persistence/repository`.
-- [ ] Substituir uso de `InMemoryRestaurantRepository` e `InMemoryUserRepository` por adaptadores reais.
-- [ ] Definir constraints no banco:
-  - [ ] `users.email` único
-  - [ ] `restaurants.cnpj` único
-- [ ] Remover implementação em memória (ou manter somente para perfil `test` explícito).
+### 1.1 Persistência real com Firebase Firestore
+- [x] Configurar Firebase Admin SDK e conectar no Firestore.
+- [x] Substituir os repositórios usados pela API por implementações Firestore.
+- [x] Manter implementação em memória apenas no perfil `test`.
+- [ ] Criar índices e regras no Firestore para `users.email` e `restaurants.cnpj`.
 
 ### 1.2 Versionamento de banco
 - [ ] Adicionar Flyway.
@@ -216,11 +213,27 @@ Para considerar o projeto pronto para produção:
 
 ## 7) Próximos passos imediatos (ordem recomendada)
 
-1. Implementar JPA + Flyway + DTOs.
+1. Consolidar Firestore + índices + DTOs.
 2. Fechar CRUD completo (incluindo buscar por ID e ativar/desativar).
-3. Implementar autenticação JWT e hash de senha.
+3. Implementar autorização JWT por perfil.
 4. Cobrir com testes de service e controller.
 5. Configurar Actuator + Docker + pipeline CI.
+
+## 8) Firebase / Firestore
+
+1. No Firebase Console, gere uma service account em `Project Settings > Service accounts`.
+2. Salve o JSON fora do repositório.
+3. Copie `.env.example` para `.env` e preencha `FIREBASE_SERVICE_ACCOUNT_PATH`.
+4. Rode a API com o perfil desejado:
+
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+Observações:
+- o trecho `firebaseConfig` da SDK web nao autentica este backend Spring Boot;
+- para backend, a API usa `firebase-admin` com service account;
+- o perfil `test` nao acessa Firebase e usa repositórios em memoria.
 
 ---
 

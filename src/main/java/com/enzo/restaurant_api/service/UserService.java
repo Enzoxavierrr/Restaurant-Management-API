@@ -9,7 +9,6 @@ import com.enzo.restaurant_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,7 +20,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public UserResponse create(CreateUserRequest request) {
         validateRequiredFields(request);
 
@@ -42,7 +40,6 @@ public class UserService {
         return toResponse(savedUser);
     }
 
-    @Transactional(readOnly = true)
     public List<UserResponse> findAll() {
         return userRepository.findAll().stream()
                 .map(this::toResponse)

@@ -6,10 +6,10 @@ import com.enzo.restaurant_api.dto.UserResponse;
 import com.enzo.restaurant_api.entity.Role;
 import com.enzo.restaurant_api.entity.User;
 import com.enzo.restaurant_api.repository.UserRepository;
+import com.enzo.restaurant_api.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
@@ -19,9 +19,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenService jwtTokenService;
+    private final JwtService jwtService;
 
-    @Transactional
     public RegisterResponseDTO register(RegisterRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Requisição não pode ser nula.");
@@ -43,7 +42,7 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         return RegisterResponseDTO.builder()
-                .token(jwtTokenService.generateToken(savedUser))
+                .token(jwtService.generateToken(savedUser))
                 .user(toUserResponse(savedUser))
                 .build();
     }

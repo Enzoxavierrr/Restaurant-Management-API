@@ -11,7 +11,6 @@ import com.enzo.restaurant_api.repository.RestaurantRepository;
 import com.enzo.restaurant_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
 
-    @Transactional
     public RestaurantResponse create(RestaurantRequest request) {
         validateRequiredFields(request);
 
@@ -49,34 +47,29 @@ public class RestaurantService {
         return toResponse(findById(id));
     }
 
-    @Transactional(readOnly = true)
     public Restaurant findById(Long id) {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
-    @Transactional(readOnly = true)
     public List<RestaurantResponse> findAll() {
         return restaurantRepository.findAll().stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    @Transactional
     public RestaurantResponse activate(Long id) {
         Restaurant restaurant = findById(id);
         restaurant.activate();
         return toResponse(restaurantRepository.save(restaurant));
     }
 
-    @Transactional
     public RestaurantResponse deactivate(Long id) {
         Restaurant restaurant = findById(id);
         restaurant.deactivate();
         return toResponse(restaurantRepository.save(restaurant));
     }
 
-    @Transactional
     public RestaurantResponse update(Long id, RestaurantRequest request) {
         validateRequiredFields(request);
 
@@ -103,7 +96,6 @@ public class RestaurantService {
         return toResponse(restaurantRepository.save(existingRestaurant));
     }
 
-    @Transactional
     public void deleteById(Long id) {
         findById(id);
         restaurantRepository.deleteById(id);

@@ -5,7 +5,7 @@ import com.enzo.restaurant_api.dto.LoginResponseDTO;
 import com.enzo.restaurant_api.dto.RegisterRequestDTO;
 import com.enzo.restaurant_api.dto.RegisterResponseDTO;
 import com.enzo.restaurant_api.exception.InvalidCredentialsException;
-import com.enzo.restaurant_api.security.JwtTokenProvider;
+import com.enzo.restaurant_api.security.JwtService;
 import com.enzo.restaurant_api.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtService jwtService;
     private final AuthService authService;
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -38,7 +38,7 @@ public class AuthController {
 
         try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            String token = jwtTokenProvider.createToken(authentication);
+            String token = jwtService.generateToken(authentication);
             return LoginResponseDTO.builder()
                     .token(token)
                     .tokenType("Bearer")

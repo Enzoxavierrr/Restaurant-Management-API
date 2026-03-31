@@ -1,0 +1,48 @@
+{
+  "users": [
+    {
+      "name": "Ana Costa",
+      "email": "ana.costa@example.com",
+      "password": "SenhaSegura123!"
+    },
+    {
+      "name": "Pedro Almeida",
+      "email": "pedro.almeida@example.com",
+      "password": "MapaDoChef2026"
+    },
+    {
+      "name": "Lúcia Dias",
+      "email": "lucia.dias@example.com",
+      "password": "EstrelaGourmet9"
+    }
+  ],
+  "restaurants": [
+    {
+      "name": "Bistrô da Praça",
+      "cnpj": "12.345.678/0001-90",
+      "phone": "(11) 91234-5678",
+      "email": "contato@bistrodacasa.com",
+      "address": "Praça das Orquídeas, 120",
+      "active": true,
+      "ownerId": 1
+    },
+    {
+      "name": "Cantina São Gonçalo",
+      "cnpj": "98.765.432/0001-10",
+      "phone": "(21) 98877-6655",
+      "email": "reservas@cantinasg.com",
+      "address": "Rua do Páteo, 58",
+      "active": false,
+      "ownerId": 2
+    },
+    {
+      "name": "Maré Alta Culinária",
+      "cnpj": "11.222.333/0001-45",
+      "phone": "(31) 97700-1122",
+      "email": "sac@marealtaculinaria.com",
+      "address": "Avenida das Nações, 900",
+      "active": true,
+      "ownerId": 3
+    }
+  ]
+}
