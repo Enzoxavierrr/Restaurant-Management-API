@@ -48,6 +48,7 @@ public class FirebaseConfig {
     }
 
     private GoogleCredentials loadCredentials(FirebaseProperties properties) throws IOException {
+        // Opção 1: JSON completo como string
         if (StringUtils.hasText(properties.getServiceAccountJson())) {
             try (InputStream inputStream = new ByteArrayInputStream(
                     properties.getServiceAccountJson().getBytes(StandardCharsets.UTF_8))) {
@@ -55,10 +56,16 @@ public class FirebaseConfig {
             }
         }
 
+        // Opção 2: Caminho para o arquivo JSON
         if (StringUtils.hasText(properties.getServiceAccountPath())) {
             try (InputStream inputStream = new FileInputStream(properties.getServiceAccountPath())) {
                 return GoogleCredentials.fromStream(inputStream);
             }
+        }
+
+        // Opção 3: Credenciais individuais via variáveis de ambiente
+        if (StringUtils.hasText(properties.getClientEmail()) && StringUtils.hasText(properties.getPrivateKey())) {
+            return credentialsFromFields(properties);
         }
 
         try {
@@ -68,7 +75,47 @@ public class FirebaseConfig {
         }
 
         throw new IllegalStateException(
-                "Firebase nao configurado. Defina app.firebase.service-account-path, "
-                        + "app.firebase.service-account-json ou GOOGLE_APPLICATION_CREDENTIALS.");
+                "Firebase nao configurado. Defina FIREBASE_CLIENT_EMAIL + FIREBASE_PRIVATE_KEY, "
+                        + "FIREBASE_SERVICE_ACCOUNT_PATH, FIREBASE_SERVICE_ACCOUNT_JSON "
+                        + "ou GOOGLE_APPLICATION_CREDENTIALS.");
+    }
+
+    /**
+     * Monta um JSON de service account a partir dos campos individuais do .env
+     * e usa GoogleCredentials.fromStream() para autenticar.
+     */
+    private GoogleCredentials credentialsFromFields(FirebaseProperties p) throws IOException {
+        // Normaliza a private key: converte \n literais em quebras de linha reais,
+        // depois re-escapa para JSON (\n → \\n dentro da string JSON)
+        String normalizedKey = p.getPrivateKey()
+                .replace("\\n", "\n")   // converte escape literal em newline real
+                .replace("\n", "\\n");  // re-escapa para uso dentro de JSON string
+
+        String tokenUri = StringUtils.hasText(p.getTokenUri())
+                ? p.getTokenUri()
+                : "https://oauth2.googleapis.com/token";
+
+        String json = String.format("""
+                {
+                  "type": "service_account",
+                  "project_id": "%s",
+                  "private_key_id": "%s",
+                  "private_key": "%s",
+                  "client_email": "%s",
+                  "client_id": "%s",
+                  "token_uri": "%s"
+                }
+                """,
+                p.getProjectId(),
+                p.getPrivateKeyId(),
+                normalizedKey,
+                p.getClientEmail(),
+                p.getClientId(),
+                tokenUri
+        );
+
+        try (InputStream is = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))) {
+            return GoogleCredentials.fromStream(is);
+        }
     }
 }

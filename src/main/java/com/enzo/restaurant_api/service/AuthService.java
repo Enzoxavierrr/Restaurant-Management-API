@@ -5,7 +5,6 @@ import com.enzo.restaurant_api.dto.RegisterResponseDTO;
 import com.enzo.restaurant_api.dto.UserResponse;
 import com.enzo.restaurant_api.entity.Role;
 import com.enzo.restaurant_api.entity.User;
-import com.enzo.restaurant_api.repository.UserRepository;
 import com.enzo.restaurant_api.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,42 +16,36 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
     public RegisterResponseDTO register(RegisterRequestDTO request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Requisição não pode ser nula.");
-        }
+        if (request == null) throw new IllegalArgumentException("Requisição não pode ser nula.");
 
-        String normalizedEmail = request.getEmail().trim().toLowerCase();
-        if (userRepository.existsByEmail(normalizedEmail)) {
-            throw new IllegalArgumentException("Já existe um usuário cadastrado com este e-mail.");
+        String email = request.getEmail().trim().toLowerCase();
+        if (userService.existsByEmail(email)) {
+            throw new IllegalArgumentException("Já existe um usuário com este e-mail.");
         }
 
         User user = User.builder()
                 .name(request.getName().trim())
-                .email(normalizedEmail)
+                .email(email)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .createdAt(Instant.now())
                 .role(Role.OWNER)
                 .build();
 
-        User savedUser = userRepository.save(user);
+        User saved = userService.save(user);
 
         return RegisterResponseDTO.builder()
-                .token(jwtService.generateToken(savedUser))
-                .user(toUserResponse(savedUser))
-                .build();
-    }
-
-    private UserResponse toUserResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .createdAt(user.getCreatedAt())
+                .token(jwtService.generateToken(saved))
+                .user(UserResponse.builder()
+                        .id(saved.getId())
+                        .name(saved.getName())
+                        .email(saved.getEmail())
+                        .createdAt(saved.getCreatedAt())
+                        .build())
                 .build();
     }
 }

@@ -14,4 +14,11 @@ public class FirebaseProperties {
     private String databaseUrl;
     private String serviceAccountPath;
     private String serviceAccountJson;
+
+    // Credenciais individuais (alternativa ao arquivo JSON)
+    private String privateKeyId;
+    private String privateKey;
+    private String clientEmail;
+    private String clientId;
+    private String tokenUri = "https://oauth2.googleapis.com/token";
 }

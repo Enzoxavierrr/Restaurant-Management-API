@@ -43,7 +43,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(
-            com.enzo.restaurant_api.repository.UserRepository userRepository) {
-        return new com.enzo.restaurant_api.security.RepositoryUserDetailsService(userRepository);
+            com.enzo.restaurant_api.service.UserService userService) {
+        return new com.enzo.restaurant_api.security.RepositoryUserDetailsService(userService);
     }
 }

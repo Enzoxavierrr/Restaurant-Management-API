@@ -29,7 +29,7 @@ public class RestaurantController {
 
     @GetMapping
     public List<RestaurantResponse> findAll() {
-        return restaurantService.findAll();
+        return restaurantService.getAll();
     }
 
     @PostMapping

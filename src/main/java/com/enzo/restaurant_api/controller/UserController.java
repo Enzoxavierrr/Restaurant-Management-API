@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> findAll() {
-        return userService.findAll();
+        return userService.listAll();
     }
 
     @PostMapping
